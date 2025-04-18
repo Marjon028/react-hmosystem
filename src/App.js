@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import loginPureComponent from './components/login/loginPureComponent'; 
+import Login from './components/login/login'; 
+import { isTokenExpired } from './utils/auth';
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom"; // Importing necessary modules from react-router-dom
 
+import Home from './components/home'
+
+const isAuthenticated = () => {
+  // Check if the user is authenticated
+  const token = localStorage.getItem('token');
+  
+  return token && !isTokenExpired(token);
+}
 function App() {
+ 
+  
+ 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+ 
+     
+            <Router>
+                <Routes>
+                  
+                    <Route path="/" element={ isAuthenticated() ? < Home /> : <Login/>} />
+                    <Route path="/login" element={<Login />} />
+                </Routes>
+            </Router>
+      
     </div>
   );
 }
