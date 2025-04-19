@@ -8,7 +8,8 @@ import Home from './components/home'
 
 const isAuthenticated = () => {
   // Check if the user is authenticated
-  const token = localStorage.getItem('token');
+  // This function checks if the token is present and not expired
+  const token = typeof window !== "undefined" ? localStorage.getItem('token') : null;
   
   return token && !isTokenExpired(token);
 }
@@ -25,6 +26,7 @@ function App() {
                   
                     <Route path="/" element={ isAuthenticated() ? < Home /> : <Login/>} />
                     <Route path="/login" element={<Login />} />
+                    <Route path='/home' element={<Home/>}/>
                 </Routes>
             </Router>
       
