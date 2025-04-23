@@ -1,0 +1,30 @@
+
+
+.table-header{
+   display: flex;  
+   justify-content: center;
+   gap: 2rem;
+   border: none;
+   border-radius: 3px;
+   background-color: rgba(165, 42, 42, 0.511);
+   padding: 10px;
+   margin: 10px;
+    
+}
+table {
+   
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+   
+}
+
+th{
+    background-color: black;
+    color : white;
+    
+}
+td{
+    text-align: center;
+    vertical-align: middle;
+}

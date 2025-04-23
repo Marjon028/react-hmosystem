@@ -24,7 +24,7 @@ const Login = () => {
         setLoading(true); // Set loading to true while the request is being made
 
         try {
-            const response = await fetch('https://hcs-dev.1coophealth.com/login/api/login/', {
+            const response = await fetch('http://localhost:8000/login/api/login/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

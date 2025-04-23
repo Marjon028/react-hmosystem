@@ -1,14 +1,29 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid';
 
 
+import '../style/home-table.css'
+import ParentDocument from "./ContextPages/parentDocuments";
+import ChildContext from "./ContextPages/childDocument";
+import documentData from '../context/documentData'
+const reducers = (state,action) =>{
+  switch(action.type){
+    case "insert":
+      
+      return {set : state.set}
+  }
 
+}
 const Home = () => {
+
+  const dataTrigger= {}
+  const dataTriggers= {}
+  const [state,dispatch] = useReducer(reducers,dataTrigger)
+
 const [data, setData] = useState([]);
-const [apiUrl, setApiUrl] = useState('https://hcs-dev.1coophealth.com/api/admin-get?page=all');
-
-
+const [apiUrl, setApiUrl] = useState('http://localhost:8000/api/admin-get?page=all');
 const [pages,setPage] = useState([]);
 const length = 5;
 
@@ -25,9 +40,10 @@ useEffect(() => {
     console.log(response.data);
     if (isMounted) {
       setData(response.data.data);
-      setPage(Array.from({length: response.data.total_page}, (_,i)=> i+1));
-      
      
+     
+      setPage(Array.from({length: response.data.total_page}, (_,i)=> i+1));
+
 
     }
   })
@@ -50,17 +66,30 @@ const editValue = (id ,referencenumber) =>{
 const deleteValue =(id)=>{
   setData(data.filter((key,index) => key.documentcode !== id))
 }
+
+const addValue = (type,referencenumber) =>{
+  dispatch({type:type})
+  const newData = {referencenumber: referencenumber, documentcode: uuidv4()}
+  setData([newData, ...data])
+}
+
+
   return (
+    <>
+    
+    <ParentDocument data={JSON.stringify(data)}><ChildContext /></ParentDocument>
     <div>
-      {JSON.stringify(data)}
-      {apiUrl}
      
-     <table>
    
+    
+     
+     <div className="table-header">
+     <table>
     <thead>
     <tr>
       <th>id</th>
-      <th>firstData</th>
+      <th>Reference Number</th>
+      <th>Value Edited</th>
     </tr>
 
     </thead>
@@ -71,16 +100,21 @@ const deleteValue =(id)=>{
         <tr key ={item.documentcode}>
         <td >{item.documentcode}</td>
         <td >{item.referencenumber}</td>
-        <td><input type="text" value={item.referencenumber} onChange={(e) =>editValue(item.documentcode, e.target.value)} /></td>
-        <td><button key={index}  onClick={() => deleteValue(item.documentcode)}>delete</button></td>
+        <td><input type="text" value={item.referencenumber} onChange={(e) =>editValue(item.documentcode, e.target.value)} />
+        <button key={index}  onClick={() => deleteValue(item.documentcode)}>delete</button></td>
         </tr>
         
       ))}
      
     </tbody>
      </table>
+  </div>
 
 
+<div>
+<button onClick={() =>addValue("insert","data1")}>addData</button>
+
+</div>
 <div>
   { pages.map((item,index) =>(
     <button key={index} >{item}</button>
@@ -96,6 +130,7 @@ const deleteValue =(id)=>{
     </div>
 
     </div>
+    </>
   );
 }
 

@@ -3,8 +3,10 @@ import loginPureComponent from './components/login/loginPureComponent';
 import Login from './components/login/login'; 
 import { isTokenExpired } from './utils/auth';
 import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom"; // Importing necessary modules from react-router-dom
-
 import Home from './components/home'
+import ProtectedRoute from './utils/protectedRoute';
+import childDocument from './components/ContextPages/childDocument';
+
 
 const isAuthenticated = () => {
   // Check if the user is authenticated
@@ -24,9 +26,27 @@ function App() {
             <Router>
                 <Routes>
                   
-                    <Route path="/" element={ isAuthenticated() ? < Home /> : <Login/>} />
                     <Route path="/login" element={<Login />} />
-                    <Route path='/home' element={<Home/>}/>
+                    <Route
+                      path="/"
+                      element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated()}>
+                         
+
+                          <Home />
+                       
+                       
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/home"
+                      element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated()}>
+                       <Home>  </Home>
+                    </ProtectedRoute>
+                      }
+                    />
                 </Routes>
             </Router>
       
